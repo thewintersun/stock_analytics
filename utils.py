@@ -1,19 +1,21 @@
 #coding=utf-8
 
-import MySQLdb
+import pymysql
 import traceback
 import codecs
 import os
-import urllib,urllib2
+
+import urllib.parse
+import urllib.request
 import json
 import datetime
 
 def reconnect_mysql():
-  conn= MySQLdb.connect(
+  conn= pymysql.connect(
         host='localhost',
         port = 3306,
         user='root',
-        passwd='',
+        passwd='root',
         db ='stock',
         charset="utf8",)
   cur = conn.cursor()
@@ -21,16 +23,20 @@ def reconnect_mysql():
 
 def get_sohu_stock_data(code, start_day, end_day):
   '''获取sohu的stock数据''' 
+  user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+  headers = { 'User-Agent' : user_agent }
   url='http://q.stock.sohu.com/hisHq'
-  textmod={'code': code,'start': start_day, 'end': end_day}
-  textmod = urllib.urlencode(textmod)
-  req = urllib2.Request(url = '%s%s%s' % (url,'?',textmod))
-  res = urllib2.urlopen(req)
-  res = res.read()
+  param = "code="+code+"&end="+end_day+"&start="+start_day
+  url += "?"+param
+  req  = urllib.request.Request(url)
+  res = urllib.request.urlopen(req)
+
+  res = res.read().decode('utf-8')
   print(res)
   if len(res)< 30:
     return ""
   resj = json.loads(res)
+  print(resj)
   if resj[0]['status'] != 0:
     return ""
   return resj[0]

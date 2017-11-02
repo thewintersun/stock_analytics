@@ -2,14 +2,13 @@
 #coding=utf-8
 
 
-import MySQLdb
 import traceback
 import codecs
 import os
-import urllib,urllib2
+import urllib
 import json
 import utils
-
+import pymysql
 
 
 
@@ -30,7 +29,7 @@ def write2db(data):
   conn.close()
 
 def main():
-  start="20171102" 
+  start="20160101" 
   end="20171102"
   code_list = utils.read_stock_code()
   for code in code_list:
