@@ -30,8 +30,8 @@ def write2db(data):
   conn.close()
 
 def main():
-  start="20160101" 
-  end="20171101"
+  start="20171102" 
+  end="20171102"
   code_list = utils.read_stock_code()
   for code in code_list:
     result = utils.get_sohu_stock_data(code, start, end)
